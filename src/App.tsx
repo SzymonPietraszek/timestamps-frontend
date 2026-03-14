@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 
-const timeValues = [0, 5, 10, 15, 20, 25, 30];
-const actions = ["l", "p", "lek"];
+const timeValues = import.meta.env.VITE_TIME_VALUES
+  ? import.meta.env.VITE_TIME_VALUES.split(",").map((v: string) => parseInt(v))
+  : [];
+const actions = import.meta.env.VITE_ACTIONS
+  ? import.meta.env.VITE_ACTIONS.split(",")
+  : [];
 type BackendData = Record<string, string[]>;
 
 function formatDiff(ms: number) {
