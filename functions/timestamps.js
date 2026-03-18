@@ -17,10 +17,11 @@ export const onRequest = async (context) => {
 
     const incoming = new URL(context.request.url);
     const backendUrl = new URL(incoming.pathname + incoming.search, context.env.BACKEND_URL);
+    const bodyText = await context.request.text();
 
     const response = await signedFetch(backendUrl, {
-        method: context.request.method,
-        body: context.request.text(),
+    method: context.request.method,
+    body: bodyText,
     });
 
     console.log("status:", response.status);
