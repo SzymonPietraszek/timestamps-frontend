@@ -114,7 +114,7 @@ export default function App() {
       >
         <thead>
           <tr>
-            <th>Aktywność</th>
+            <th></th>
             <th>1</th>
             <th>2</th>
             <th>3</th>

@@ -2,8 +2,10 @@ import { createSignedFetcher } from 'aws-sigv4-fetch';
 
 export const onRequest = async (context) => {
     console.log({
+    request: context.request,
     url: context.request.url,
     method: context.request.method,
+    body: context.request.body,
     });
 
     const signedFetch = createSignedFetcher({
@@ -17,14 +19,22 @@ export const onRequest = async (context) => {
 
     const incoming = new URL(context.request.url);
     const backendUrl = new URL(incoming.pathname + incoming.search, context.env.BACKEND_URL);
-    const bodyText = await context.request.text();
+    const bodyText =  context.request.method !== 'GET' ? await context.request.text() : undefined;
 
-    const response = await signedFetch(backendUrl, {
-    method: context.request.method,
-    body: bodyText,
+    console.log({
+        backendUrl: backendUrl,
+        bodyText: bodyText,
     });
 
-    console.log("status:", response.status);
+    const response = await signedFetch(backendUrl, {
+        method: context.request.method,
+        body: bodyText,
+    });
+
+    console.log({
+        response: response,
+        status: response.status,
+    });
 
     return response;
 };
