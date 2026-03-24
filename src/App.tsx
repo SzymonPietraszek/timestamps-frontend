@@ -10,14 +10,26 @@ const actions = import.meta.env.VITE_ACTIONS
 type BackendData = Record<string, string[]>;
 
 function formatDiff(ms: number) {
-  const minutes = Math.floor(ms / 60000);
+  const totalMinutes = Math.floor(ms / 60000);
 
-  const weeks = Math.floor(minutes / 10080);
-  const days = Math.floor((minutes % 10080) / 1440);
-  const hours = Math.floor((minutes % 1440) / 60);
-  const mins = minutes % 60;
+  const mins = totalMinutes % 60;
+  const totalHours = Math.floor(totalMinutes / 60);
 
-  return `${weeks ? weeks + "t " : ""}${days ? days + "d " : ""}${hours ? hours + "g " : ""}${mins}m`;
+  const hours = totalHours % 24;
+  const totalDays = Math.floor(totalHours / 24);
+
+  const days = totalDays % 7;
+  const weeks = Math.floor(totalDays / 7);
+
+  if (weeks) {
+    return `${weeks}w${days ? ` ${days}d` : ""}`;
+  }
+
+  if (days) {
+    return `${days}d${hours ? ` ${hours}h` : ""}`;
+  }
+
+  return hours ? `${hours}h${mins ? ` ${mins}m` : ""}` : `${mins}m`;
 }
 
 export default function App() {
