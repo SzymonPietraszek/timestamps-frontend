@@ -90,57 +90,50 @@ export default function App() {
       </div>
 
       {/* ===== TABLE ===== */}
-      <table
-        className="table table-bordered text-center"
-        style={{ borderCollapse: "collapse" }}
-      >
+      <table className="table table-borderless text-center">
         <thead>
           <tr>
-            <th></th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
+            <th className="px-1 py-2"></th>
+            <th className="px-1 py-2">1</th>
+            <th className="px-1 py-2">2</th>
+            <th className="px-1 py-2">3</th>
+            <th className="px-1 py-2">4</th>
+            <th className="px-1 py-2">5</th>
           </tr>
         </thead>
         <tbody>
-          {(() => {
+          {actions.map((action: string) => {
             const now = Date.now();
+            const times =
+              data[action]?.slice(0, 5).map((t) => new Date(t).getTime()) ?? [];
 
-            return actions.map((action: string) => {
-              const times =
-                data[action]?.slice(0, 5).map((t) => new Date(t).getTime()) ??
-                [];
+            const elapsed = times.map((t) => now - t);
+            const intervals = times.map((t, i, arr) =>
+              i === 0 ? now - t : arr[i - 1] - t,
+            );
 
-              const elapsed = times.map((t) => now - t);
-              const intervals = times.map((t, i, arr) =>
-                i === 0 ? now - t : arr[i - 1] - t,
-              );
+            return (
+              <Fragment key={action}>
+                <tr>
+                  <td className="px-1 py-2">{action}</td>
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <td key={i} className="text-nowrap px-1 py-2">
+                      {elapsed[i] ? formatDiff(elapsed[i]) : ""}
+                    </td>
+                  ))}
+                </tr>
 
-              return (
-                <Fragment key={action}>
-                  <tr>
-                    <td style={{ padding: "12px 20px" }}>{action}</td>
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <td key={i} style={{ padding: "12px 20px" }}>
-                        {elapsed[i] ? formatDiff(elapsed[i]) : ""}
-                      </td>
-                    ))}
-                  </tr>
-
-                  <tr>
-                    <td style={{ padding: "12px 20px" }}>\</td>
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <td key={i} style={{ padding: "12px 20px" }}>
-                        {intervals[i] ? formatDiff(intervals[i]) : ""}
-                      </td>
-                    ))}
-                  </tr>
-                </Fragment>
-              );
-            });
-          })()}
+                <tr>
+                  <td className="px-1 py-2">-</td>
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <td key={i} className="text-nowrap px-1 py-2">
+                      {intervals[i] ? formatDiff(intervals[i]) : ""}
+                    </td>
+                  ))}
+                </tr>
+              </Fragment>
+            );
+          })}
         </tbody>
       </table>
     </div>
