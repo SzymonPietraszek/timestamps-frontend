@@ -152,7 +152,7 @@ export default function App() {
             return (
               <Fragment key={action}>
                 <tr>
-                  <td className="px-1 py-2">-</td>
+                  <td className="px-1 py-2">{action}</td>
                   {[0, 1, 2, 3, 4].map((i) => (
                     <td key={i} className="text-nowrap px-1 py-2">
                       {intervals[i] ? formatDiff(intervals[i]) : ""}
